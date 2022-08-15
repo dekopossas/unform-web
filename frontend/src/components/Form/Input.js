@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useField } from '@unform/core'
 
 function Input({name}) {
+  const {fieldNames, registerField, defaultValue, error} = useField(name)
 
-  const field = useField(name)
+  useEffect(() => {}, []);
 
   return (
-    <div>Input</div>
+    <input onChange={(e) => e.target.value} />
   )
 }
 
