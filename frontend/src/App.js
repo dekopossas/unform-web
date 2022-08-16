@@ -2,6 +2,10 @@ import './App.css';
 import { Form } from '@unform/web';
 import Input from './components/Form/Input';
 
+const initialData = {
+  email: 'andre@possas.com',
+}
+
 function App() {
   const handleSubmit = (data) => {
     console.log(data);
@@ -11,10 +15,10 @@ function App() {
     <div className="App">
       <h1>hellow world</h1>
 
-      <Form onSubmit={handleSubmit}>
+      <Form initialData={initialData} onSubmit={handleSubmit}>
           <Input name="name" />
-          <Input name="email" />
-          <Input name="passaword" />
+          <Input type="email" name="email" />
+          <Input type="password" name="passaword" />
 
         <button type="submit">Enviar</button>
       </Form>
