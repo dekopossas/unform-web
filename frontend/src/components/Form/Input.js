@@ -10,10 +10,16 @@ function Input({ name, ...rest }) {
       name: fieldName,
       ref: inputRef.current,
       path: 'value',
-    })
+    });
   }, [fieldName, registerField]);
 
-  return <input ref={inputRef} defaultValue={defaultValue} {...rest} />;
+  return (
+    <div>
+      <input ref={inputRef} defaultValue={defaultValue} {...rest} />
+
+      {error && <span style={{color: '#f00'}}>{error}</span>}
+    </div>
+  );
 }
 
 export default Input;
