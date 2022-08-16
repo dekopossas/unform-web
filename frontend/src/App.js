@@ -15,11 +15,18 @@ const initialData = {
 function App() {
   const formRef = useRef(null);
 
-  const handleSubmit = (data) => {
-    if(data.name === ''){
-      formRef.current.setFieldError('name', 'O nome é Obrigatório')
+  const handleSubmit = (data, { reset }) => {
+    if (data.name === '') {
+      formRef.current.setErrors({
+        name: 'O nome é Obrigatório',
+        address: {
+          city: 'A Cidade é obrigatória',
+        },
+      });
     }
     console.log(data);
+
+    reset();
   };
 
   return (
