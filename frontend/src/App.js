@@ -2,6 +2,7 @@ import './App.css';
 import { useRef } from 'react';
 import { Form } from '@unform/web';
 import { Scope } from '@unform/core';
+import * as Yup from 'yup';
 
 import Input from './components/Form/Input';
 
@@ -15,18 +16,36 @@ const initialData = {
 function App() {
   const formRef = useRef(null);
 
-  const handleSubmit = (data, { reset }) => {
-    if (data.name === '') {
-      formRef.current.setErrors({
-        name: 'O nome é Obrigatório',
-        address: {
-          city: 'A Cidade é obrigatória',
-        },
+  const handleSubmit = async (data, { reset }) => {
+    try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required('O nome é obrigatório'),
+        email: Yup.string().email('Digite um e-mail válido').required('O e-mail é obrigatório'),
+        address: Yup.object().shape({
+          city: Yup.string().min(3, 'No mínimo 3 caracteres').required('A cidade é obrigatória'),
+        }),
       });
-    }
-    console.log(data);
 
-    reset();
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+      console.log(data);
+
+      formRef.current.setErrors({});
+
+      reset();
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errorMessages = {};
+
+        err.inner.forEach((error) => {
+          errorMessages[error.path] = error.message;
+        });
+
+        formRef.current.setErrors(errorMessages);
+      }
+    }
   };
 
   return (
@@ -35,7 +54,7 @@ function App() {
 
       <Form ref={formRef} initialData={initialData} onSubmit={handleSubmit}>
         <Input name="name" placeholder="nome" />
-        <Input type="email" name="email" placeholder="email" />
+        <Input name="email" placeholder="email" />
         <Input type="password" name="passaword" placeholder="senha" />
 
         <Scope path="address">
