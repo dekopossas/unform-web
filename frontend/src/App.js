@@ -1,17 +1,10 @@
 import './App.css';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Form } from '@unform/web';
 import { Scope } from '@unform/core';
 import * as Yup from 'yup';
 
 import Input from './components/Form/Input';
-
-const initialData = {
-  email: 'andre@possas.com',
-  address: {
-    city: 'Belo Horizonte',
-  },
-};
 
 function App() {
   const formRef = useRef(null);
@@ -48,11 +41,23 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      formRef.current.setData({
+        name: 'André possas',
+        email: 'andre.possas@gmail.com',
+        address: {
+          city: 'Rio de Janeiro',
+        },
+      });
+    }, 2000);
+  }, []);
+
   return (
     <div className="App">
       <h1>hellow world</h1>
 
-      <Form ref={formRef} initialData={initialData} onSubmit={handleSubmit}>
+      <Form ref={formRef} onSubmit={handleSubmit}>
         <Input name="name" placeholder="nome" />
         <Input name="email" placeholder="email" />
         <Input type="password" name="passaword" placeholder="senha" />
